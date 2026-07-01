@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интерактивная памятка-листалка: сведения для оценки профессиональных рисков</title>
+<style>
+  :root{
+    --bg1:#eef7ff; --bg2:#f8fbff; --card:#ffffff; --ink:#17324d; --muted:#60758a;
+    --accent:#1e88e5; --accent2:#00a67e; --warn:#ffb020; --danger:#e5484d;
+    --shadow:0 18px 45px rgba(23,50,77,.16); --radius:28px;
+  }
+  *{box-sizing:border-box}
+  html, body{width:100%; height:100%; overflow:hidden}
+  body{
+    margin:0; min-height:100vh; font-family:Arial, Helvetica, sans-serif; color:var(--ink);
+    background: radial-gradient(circle at 12% 10%, #d9f1ff 0 22%, transparent 23%),
+                radial-gradient(circle at 90% 90%, #dcfff4 0 22%, transparent 23%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .app{
+    position:relative; width:100vw; max-width:100vw; height:min(600px,100vh); max-height:600px;
+    min-width:480px; min-height:360px; padding:14px 18px; overflow:hidden; resize:both;
+    display:flex; flex-direction:column;
+  }
+  .app:after{
+    content:""; position:absolute; right:5px; bottom:5px; width:18px; height:18px; pointer-events:none; opacity:.45;
+    background:linear-gradient(135deg, transparent 0 45%, var(--accent) 46% 54%, transparent 55% 62%, var(--accent) 63% 71%, transparent 72%);
+  }
+  .top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:10px; flex:0 0 auto}
+  h1{font-size:clamp(20px,2.4vw,31px); line-height:1.08; margin:0; letter-spacing:-.02em}
+  .subtitle{margin:6px 0 0; color:var(--muted); font-size:14px}
+  .badge{white-space:nowrap; padding:8px 12px; border-radius:999px; background:#fff; box-shadow:0 8px 20px rgba(23,50,77,.1); color:var(--accent); font-weight:700}
+  .stage{position:relative; perspective:1200px; flex:1 1 auto; min-height:0}
+  .card{
+    height:100%; min-height:0; background:rgba(255,255,255,.92); border:1px solid rgba(30,136,229,.14);
+    border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:grid; grid-template-columns: .9fr 1.55fr;
+  }
+  .visual{
+    background:linear-gradient(160deg,#1e88e5,#00a67e); color:#fff; padding:26px; position:relative;
+    display:flex; flex-direction:column; justify-content:space-between; overflow:hidden;
+  }
+  .visual:before,.visual:after{content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.16)}
+  .visual:before{width:220px;height:220px;right:-80px;top:-60px}.visual:after{width:180px;height:180px;left:-60px;bottom:-70px}
+  .num{position:relative; font-size:68px; font-weight:900; line-height:1; opacity:.95}
+  .icon{position:relative; width:118px; height:118px; align-self:center; margin:18px 0}
+  .icon svg{width:100%;height:100%;filter:drop-shadow(0 12px 20px rgba(0,0,0,.2))}
+  .content{padding:30px 36px; display:flex; flex-direction:column; justify-content:center; overflow:hidden}
+  h2{font-size:clamp(24px,2.8vw,38px); margin:0 0 14px; line-height:1.06; letter-spacing:-.03em}
+  .text{font-size:clamp(17px,1.8vw,21px); line-height:1.38; margin:0; color:#263f58}
+  .hint{margin-top:18px; color:var(--muted); font-size:13px; border-left:4px solid #d7e8f7; padding-left:12px}
+  .controls{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; flex:0 0 auto}
+  button{
+    border:none; border-radius:14px; padding:11px 15px; font-weight:800; cursor:pointer; color:#fff;
+    background:linear-gradient(135deg,var(--accent),#1565c0); box-shadow:0 8px 18px rgba(30,136,229,.22);
+  }
+  button.secondary{background:#fff; color:var(--ink); border:1px solid #d7e8f7; box-shadow:none}
+  button:active{transform:translateY(1px)}
+  .dots{display:flex; gap:7px; flex-wrap:wrap; justify-content:center; flex:1}
+  .dot{width:10px;height:10px;border-radius:999px;background:#b9d2e8; cursor:pointer; transition:.2s}.dot.active{width:30px;background:var(--accent)}
+  .progress{height:7px; background:#d9ecfb; border-radius:999px; overflow:hidden; margin-top:10px; flex:0 0 auto}.bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:.25s}
+  .mini{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px}
+  .mini div{background:rgba(255,255,255,.7); border:1px solid #d7e8f7; border-radius:14px; padding:10px; color:var(--muted); font-size:13px}
+  .mini b{display:block; color:var(--ink); margin-bottom:3px}
+  @media (max-width:760px){
+    .app{min-width:320px;padding:10px;height:min(600px,100vh)}.top{display:block;margin-bottom:8px}.badge{display:inline-block;margin-top:8px}.subtitle{display:none}.card{grid-template-columns:1fr}.visual{min-height:145px;padding:18px;display:grid;grid-template-columns:auto 1fr;align-items:center}.content{padding:20px}.num{font-size:48px}.icon{width:78px;height:78px;margin:0 auto}.text{font-size:17px}.hint{margin-top:12px}.controls{flex-wrap:wrap}.dots{order:3;width:100%}.mini{grid-template-columns:1fr}
+  }
+  @media print{
+    body{display:block;background:#fff;padding:0}.app{width:100%}.controls,.progress,.hint{display:none}.card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid;margin-bottom:12px;min-height:auto}.visual{print-color-adjust:exact;-webkit-print-color-adjust:exact}.top{margin:20px}.stage{margin:20px}
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="top">
+    <div>
+      <h1>Памятка-листалка по оценке профессиональных рисков</h1>
+      <p class="subtitle">Что фиксировать при идентификации опасностей и оформлении результатов оценки риска.</p>
+    </div>
+    <div class="badge" id="counter">1 / 12</div>
+  </div>
+
+  <section class="stage" aria-live="polite">
+    <article class="card">
+      <div class="visual">
+        <div class="num" id="num">01</div>
+        <div class="icon" id="icon"></div>
+        </div>
+      <div class="content">
+        <h2 id="title">Наименование опасности</h2>
+        <p class="text" id="text">Укажите, какая именно опасность выявлена: падение, воздействие шума, поражение электрическим током, химическое воздействие и т. п.</p>
+        <div class="hint" id="hint">Подсказка: формулировка должна быть краткой и однозначной.</div>
+        <div class="mini" id="mini"></div>
+      </div>
+    </article>
+  </section>
+
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="controls">
+    <button class="secondary" id="prev">← Назад</button>
+    <div class="dots" id="dots" aria-label="Навигация по карточкам"></div>
+    <button id="next">Далее →</button>
+    <button class="secondary" onclick="window.print()">Печать/PDF</button>
+  </div>
+</main>
+<script>
+const icons = {
+  danger:`<svg viewBox="0 0 120 120" fill="none"><path d="M60 10 112 102H8L60 10Z" fill="white"/><path d="M60 35v34" stroke="#e5484d" stroke-width="10" stroke-linecap="round"/><circle cx="60" cy="85" r="6" fill="#e5484d"/></svg>`,
+  event:`<svg viewBox="0 0 120 120" fill="none"><rect x="18" y="22" width="84" height="72" rx="15" fill="white"/><path d="M35 47h50M35 65h30" stroke="#1e88e5" stroke-width="8" stroke-linecap="round"/><path d="M82 74l14 14" stroke="#e5484d" stroke-width="7" stroke-linecap="round"/><circle cx="72" cy="64" r="15" stroke="#e5484d" stroke-width="7"/></svg>`,
+  place:`<svg viewBox="0 0 120 120" fill="none"><path d="M60 110s35-32 35-64a35 35 0 1 0-70 0c0 32 35 64 35 64Z" fill="white"/><circle cx="60" cy="46" r="15" fill="#00a67e"/></svg>`,
+  object:`<svg viewBox="0 0 120 120" fill="none"><rect x="18" y="28" width="84" height="66" rx="12" fill="white"/><path d="M32 50h56M32 70h35" stroke="#1e88e5" stroke-width="8" stroke-linecap="round"/><path d="M78 69l10 10 18-22" stroke="#00a67e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  list:`<svg viewBox="0 0 120 120" fill="none"><rect x="24" y="15" width="72" height="90" rx="12" fill="white"/><path d="M44 42h34M44 60h34M44 78h34" stroke="#1e88e5" stroke-width="7" stroke-linecap="round"/><circle cx="34" cy="42" r="4" fill="#00a67e"/><circle cx="34" cy="60" r="4" fill="#00a67e"/><circle cx="34" cy="78" r="4" fill="#00a67e"/></svg>`,
+  sout:`<svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="44" fill="white"/><path d="M60 60 83 42" stroke="#1e88e5" stroke-width="8" stroke-linecap="round"/><path d="M32 72a31 31 0 0 1 56 0" stroke="#00a67e" stroke-width="8" stroke-linecap="round"/><circle cx="60" cy="60" r="7" fill="#e5484d"/></svg>`,
+  control:`<svg viewBox="0 0 120 120" fill="none"><path d="M60 14 96 30v27c0 25-15 43-36 51-21-8-36-26-36-51V30l36-16Z" fill="white"/><path d="m42 61 13 13 26-30" stroke="#00a67e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  probability:`<svg viewBox="0 0 120 120" fill="none"><rect x="18" y="18" width="84" height="84" rx="20" fill="white"/><path d="M36 82V60M60 82V42M84 82V30" stroke="#1e88e5" stroke-width="10" stroke-linecap="round"/><path d="M33 92h55" stroke="#00a67e" stroke-width="7" stroke-linecap="round"/></svg>`,
+  consequence:`<svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="45" fill="white"/><path d="M60 28v32l22 13" stroke="#e5484d" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 88 88 32" stroke="#1e88e5" stroke-width="7" stroke-linecap="round"/></svg>`,
+  level:`<svg viewBox="0 0 120 120" fill="none"><rect x="20" y="72" width="18" height="28" rx="5" fill="white"/><rect x="42" y="54" width="18" height="46" rx="5" fill="white"/><rect x="64" y="35" width="18" height="65" rx="5" fill="white"/><rect x="86" y="20" width="18" height="80" rx="5" fill="white"/></svg>`,
+  measures:`<svg viewBox="0 0 120 120" fill="none"><path d="M32 86 18 100" stroke="white" stroke-width="10" stroke-linecap="round"/><path d="M49 31a27 27 0 0 1 33 33L61 43 43 61l21 21a27 27 0 0 1-33-33l18-18Z" fill="white"/></svg>`
+};
+const slides = [
+  {t:'Наименование опасности', k:'Шаг 1', icon:'danger', txt:'Укажите, какая именно опасность выявлена: падение, воздействие шума, поражение электрическим током, химическое воздействие и т. п.', hint:'Подсказка: формулировка должна быть краткой и однозначной.'},
+  {t:'Описание потенциального опасного события', k:'Шаг 2', icon:'event', txt:'Опишите, что может произойти при реализации опасности: травма, авария, ожог, отравление, повреждение оборудования, ухудшение здоровья.', hint:'Важно описывать событие как сценарий: «работник может… при…».'},
+  {t:'Объекты, где может возникнуть опасность', k:'Шаг 3', icon:'place', txt:'Зафиксируйте места, оборудование, зоны или процессы, в которых данная опасность может проявиться.', hint:'Например: станок, склад, лестница, зона погрузки, электрощитовая.'},
+  {t:'Объект исследования', k:'Шаг 4', icon:'object', txt:'Определите формат исследования: рабочее место, рабочая зона, производственная операция, производственный объект, вид выполняемых работ или нештатная ситуация.', hint:'Один риск может относиться сразу к нескольким объектам исследования.'},
+  {t:'Перечень рабочих мест и иных объектов исследования', k:'Шаг 5', icon:'list', txt:'Составьте список конкретных рабочих мест, зон, операций или объектов, на которых присутствует выявленная опасность.', hint:'Чем точнее перечень, тем проще назначить меры контроля.'},
+  {t:'Класс условий труда по СОУТ', k:'Шаг 6', icon:'sout', txt:'Для опасностей, связанных с факторами производственной среды и трудового процесса, укажите класс или подкласс условий труда по результатам СОУТ.', hint:'Заполняется при наличии соответствующего фактора и результатов спецоценки.'},
+  {t:'Существующие меры контроля риска', k:'Шаг 7', icon:'control', txt:'Перечислите уже применяемые меры: ограждения, инструкции, обучение, СИЗ, вентиляция, блокировки, знаки безопасности, регламенты и контроль.', hint:'Указывайте только реально действующие меры, а не планируемые.'},
+  {t:'Предварительная оценка вероятности', k:'Шаг 8', icon:'probability', txt:'Оцените, насколько вероятно наступление опасного события с учётом частоты работ, статистики, состояния оборудования и дисциплины персонала.', hint:'Можно использовать шкалу работодателя: низкая, средняя, высокая или балльную.'},
+  {t:'Предварительная оценка последствий', k:'Шаг 9', icon:'consequence', txt:'Оцените возможную тяжесть последствий: лёгкая травма, временная нетрудоспособность, тяжёлый вред, смертельный исход, групповой несчастный случай.', hint:'Ориентируйтесь на максимально реалистичный, а не самый фантастический сценарий.'},
+  {t:'Уровень профессионального риска', k:'Шаг 10', icon:'level', txt:'Определите итоговый уровень риска: высокий, умеренный, незначительный — либо по иной классификации, выбранной работодателем.', hint:'Обычно уровень определяется сочетанием вероятности и тяжести последствий.'},
+  {t:'Дополнительные меры контроля', k:'Шаг 11', icon:'measures', txt:'Для высоких рисков, а при необходимости и для умеренных, запланируйте дополнительные меры: технические, организационные, обучающие, обеспечивающие или контрольные.', hint:'Приоритет — устранение опасности и технические меры, затем организационные и СИЗ.'},
+  {t:'Итоговая проверка', k:'Финал', icon:'control', txt:'Проверьте, что по каждой опасности заполнены: где возникает, кого касается, какие меры уже есть, как оценены вероятность и последствия, какие действия нужны дальше.', hint:'Готовую карточку риска удобно использовать для плана мероприятий по охране труда.', mini:[['1','Опасность'],['2','Событие'],['3','Место'],['4','СОУТ'],['5','Меры'],['6','Уровень риска']]}
+];
+let i = 0;
+const $ = id => document.getElementById(id);
+function render(){
+  const s = slides[i];
+  $('counter').textContent = `${i+1} / ${slides.length}`;
+  $('num').textContent = String(i+1).padStart(2,'0');
+  $('title').textContent = s.t;
+  $('text').textContent = s.txt;
+  $('hint').textContent = s.hint;
+  $('icon').innerHTML = icons[s.icon];
+  $('bar').style.width = `${((i+1)/slides.length)*100}%`;
+  $('mini').innerHTML = s.mini ? s.mini.map(x=>`<div><b>${x[0]}</b>${x[1]}</div>`).join('') : '';
+  document.querySelectorAll('.dot').forEach((d,idx)=>d.classList.toggle('active', idx===i));
+}
+function go(n){ i = (n + slides.length) % slides.length; render(); }
+$('prev').onclick = () => go(i-1);
+$('next').onclick = () => go(i+1);
+document.addEventListener('keydown', e => { if(e.key==='ArrowLeft') go(i-1); if(e.key==='ArrowRight') go(i+1); });
+$('dots').innerHTML = slides.map((_,idx)=>`<span class="dot" title="Карточка ${idx+1}" onclick="go(${idx})"></span>`).join('');
+render();
+</script>
+</body>
+</html>
